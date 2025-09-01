@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Glove Box Maintenance Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: url('/static/glovebox-bg.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 0;
+            background: linear-gradient(to right, #007BFF, #00C6FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            cursor: pointer;
+        }
+
+        .result {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="/static/icon.svg" alt="Glovebox Icon">
+            <h2>Glove Box Maintenance Predictor</h2>
+        </div>
+        <form method="post" action="/predict">
+            <label for="hinge_stress">Hinge Stress (N·m):</label>
+            <input type="number" step="0.01" name="hinge_stress" id="hinge_stress" placeholder="e.g. 70" required>
+
+            <label for="temperature">Temperature (°C):</label>
+            <select name="temperature" id="temperature">
+                <option value="25">Ambient (25°C)</option>
+                <option value="30">Room (30°C)</option>
+                <option value="45">High (45°C)</option>
+                <option value="55">Extreme (55°C)</option>
+            </select>
+
+            <label for="vibration">Vibration Level (g):</label>
+            <input type="number" step="0.01" name="vibration" id="vibration" placeholder="e.g. 0.65" required>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction is not none %}
+        <div class="result">
+            <p>🔍 Failure Prediction: {{ prediction }}</p>
+            <p>📊 Risk Score: {{ risk_score }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
